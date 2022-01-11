@@ -26,6 +26,7 @@ for l in f:
   elif key == '!oufname1':  oufname1 = ll[1]
   elif key == '!ougfname1':  ougfname1 = ll[1]
   elif key == '!ougfname2':  ougfname2 = ll[1]
+  elif key == '!linear_length_scale':  linear_length_scale = float(ll[1])
   else:
     print("Error.  Unrecognized key.")
     print("  key: ", key)
@@ -87,6 +88,10 @@ for i in range(n_track):
 
 for i in range(n_track):
   atrack[i].pro1()
+
+for i in range(n_track):
+  atrack[i].linear_length_scale = linear_length_scale
+  atrack[i].pro2()
 
 
 ou = ''

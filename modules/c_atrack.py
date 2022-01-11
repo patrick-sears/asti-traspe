@@ -8,7 +8,7 @@ import math
 class c_atrack:
   #
   def __init__(self):
-    self.x = None
+    self.linear_length_scale = None
   #
   def load(self, f):
     ll = f.readline().strip().split(' ')
@@ -54,6 +54,33 @@ class c_atrack:
     #
     self.mean_u2 = self.mean_u_dx**2 + self.mean_u_dy**2
     self.mean_u  = math.sqrt( self.mean_u2 )
+  #
+  def pro2(self):
+    lls2 = self.linear_length_scale**2
+    #
+    # linpos(x y) is the original track using only points
+    # that have traveled at least linear_length_scale from
+    # the previous point.
+    self.linposx = []
+    self.linposy = []
+    self.linposx.append( self.posx[0] )
+    self.linposy.append( self.posy[0] )
+    #
+    pi0 = 0
+    pi1 = 0
+    for i in range(1, self.n_pos):
+      pi1 = i
+      p0x = self.posx[pi0]
+      p0y = self.posy[pi0]
+      p1x = self.posx[pi1]
+      p1y = self.posy[pi1]
+      delta2 = (p1x-p0x)**2 + (p1y-p0y)**2
+      if delta2 >= lls2:
+        self.linposx.append( p1x )
+        self.linposy.append( p1y )
+        pi0 = pi1
+    self.n_linpos = len(self.linposx)
+    #  print("n_linpos: ", self.n_linpos)
   #
   def plot_mean_u(self):
     p0 = [0, self.mean_u_dx]
