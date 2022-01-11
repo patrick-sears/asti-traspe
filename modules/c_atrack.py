@@ -81,6 +81,24 @@ class c_atrack:
         pi0 = pi1
     self.n_linpos = len(self.linposx)
     #  print("n_linpos: ", self.n_linpos)
+    #
+    # displacement vectors.
+    self.lin_dx = []
+    self.lin_dy = []
+    self.lin_vmag  = []
+    for i in range(1, self.n_linpos):
+      self.lin_dx.append( self.linposx[i] - self.linposx[i-1] )
+      self.lin_dy.append( self.linposy[i] - self.linposy[i-1] )
+      self.lin_vmag.append( math.sqrt( self.lin_dx[i-1]**2 + self.lin_dy[i-1]**2 ) )
+    #
+    self.n_lin_v = len(self.lin_dx)
+    # curvatures for each set of two displacement vectors.
+    self.curv = []
+    for i in range(1, self.n_lin_v):
+      im = i-1
+      dotp = self.lin_dx[im] * self.lin_dx[i] + self.lin_dy[im] * self.lin_dy[i]
+      dotpp = dotp / (self.lin_vmag[im] * self.lin_vmag[i])
+      self.curv.append( math.acos( dotpp ) * self.linear_length_scale )
   #
   def plot_mean_u(self):
     p0 = [0, self.mean_u_dx]
