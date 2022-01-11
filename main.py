@@ -86,10 +86,12 @@ for i in range(n_track):
 
 
 ou = ''
+ou += 'i_track mean_u_dx(um/s) mean_u_dy(um/s) mean_u(um/s)\n'
 for i in range(n_track):
   ou += str(i)
   ou += ' {0:0.3f}'.format( atrack[i].mean_u_dx )
   ou += ' {0:0.3f}'.format( atrack[i].mean_u_dy )
+  ou += ' {0:0.3f}'.format( atrack[i].mean_u )
   ou += '\n'
 fz = open('z01a.data', 'w')
 fz.write(ou)
@@ -104,8 +106,23 @@ for i in range(1, n_track):
     mean_u_max = atrack[i].mean_u
 
 
+pos0_x = []
+pos0_y = []
+for i in range(n_track):
+  pos0_x.append( atrack[i].posx[0] )
+  pos0_y.append( atrack[i].posy[0] )
+
+
 ##################################################################
 fig = plt.figure()
+
+plt.plot( pos0_x, pos0_y,
+  linestyle='none',
+  marker='o',
+  markeredgecolor='#000000',
+  markerfacecolor='none',
+  markersize=8
+  )
 
 for i in range(n_track):
   atrack[i].plot_track()
