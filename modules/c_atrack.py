@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from matplotlib import pyplot as plt
+import math
 
 
 ##################################################################
@@ -33,6 +34,7 @@ class c_atrack:
     self.im_w_px = im_w_px
     self.im_h_px = im_h_px
     #
+    self.s_per_frame = self.ms_per_frame / 1000.0
     self.im_w = self.im_w_px * um_per_pix
     self.im_h = self.im_h_px * um_per_pix
   #
@@ -44,7 +46,21 @@ class c_atrack:
       uposy = self.im_h_px - self.posy_px[i] - 1
       self.posy.append( uposy * self.um_per_pix )
   #
-  def draw_track(self):
+    self.delta_t = (self.n_pos-1) * self.s_per_frame
+    self.delta_x = self.posx[ self.n_pos-1 ] - self.posx[0]
+    self.delta_y = self.posy[ self.n_pos-1 ] - self.posy[0]
+    self.mean_u_dx = self.delta_x / self.delta_t
+    self.mean_u_dy = self.delta_y / self.delta_t
+    #
+    self.mean_u2 = self.mean_u_dx**2 + self.mean_u_dy**2
+    self.mean_u  = math.sqrt( self.mean_u2 )
+  #
+  def plot_mean_u(self):
+    p0 = [0, self.mean_u_dx]
+    p1 = [0, self.mean_u_dy]
+    plt.plot(p0, p1)
+  #
+  def plot_track(self):
     plt.plot(self.posx, self.posy)
   #
   #

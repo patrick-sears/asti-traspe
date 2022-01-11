@@ -85,17 +85,58 @@ for i in range(n_track):
   atrack[i].pro1()
 
 
+ou = ''
+for i in range(n_track):
+  ou += str(i)
+  ou += ' {0:0.3f}'.format( atrack[i].mean_u_dx )
+  ou += ' {0:0.3f}'.format( atrack[i].mean_u_dy )
+  ou += '\n'
+fz = open('z01a.data', 'w')
+fz.write(ou)
+fz.close()
 
 
+mean_u_max  = atrack[0].mean_u
+
+
+for i in range(1, n_track):
+  if atrack[i].mean_u > mean_u_max:
+    mean_u_max = atrack[i].mean_u
 
 
 ##################################################################
 fig = plt.figure()
 
 for i in range(n_track):
-  atrack[i].draw_track()
+  atrack[i].plot_track()
 
-plt.savefig('z005.png')
+plt.xlim(-10, atrack[0].im_w+10 )
+plt.ylim(-10, atrack[0].im_h+10 )
+plt.gca().set_aspect('equal', adjustable='box')
+
+plt.title("scale:  um")
+
+plt.savefig('z901.png')
+
+
+
+##################################################################
+plt.clf()
+fig = plt.figure()
+
+for i in range(n_track):
+  atrack[i].plot_mean_u()
+
+plt.xlim( -mean_u_max-10, mean_u_max+10 )
+plt.ylim( -mean_u_max-10, mean_u_max+10 )
+plt.gca().set_aspect('equal', adjustable='box')
+
+plt.title("scale:  um/s")
+
+plt.savefig('z902.png')
+
+
+
 
 
 
