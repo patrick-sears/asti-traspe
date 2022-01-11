@@ -193,6 +193,7 @@ plt.savefig(oudir+'/'+ougfname1)
 
 
 print("n_exou: ", n_exou)
+
 ##################################################################
 for xi in range(n_exou):
   i = exou_i[xi]
@@ -227,6 +228,43 @@ for xi in range(n_exou):
   oufname = exou_tdir[xi]+'/track.png'
   print("saving:  ", oufname)
   plt.savefig(oufname)
+
+
+##################################################################
+for xi in range(n_exou):
+  i = exou_i[xi]
+  #
+  plt.clf()
+  fig = plt.figure()
+  #
+  plt.plot( [pos0_x[i]], [pos0_y[i]],
+    linestyle='none',
+    marker='o',
+    markeredgecolor='#000000',
+    markerfacecolor='none',
+    markersize=8
+    )
+  #
+  ca = fig.gca()
+  #
+  for j in range(n_track):
+    if j == i:  continue
+    atrack[j].plot_track_lin(color='#cccccc')
+  #
+  # Plot the track of interest on top.
+  atrack[i].plot_track_lin(color='#990000')
+  #
+  plt.xlim(-10, atrack[0].im_w+10 )
+  plt.ylim(-10, atrack[0].im_h+10 )
+  plt.gca().set_aspect('equal', adjustable='box')
+  #
+  title = "track_id "+str(exou_id[xi])+", scale: um."
+  plt.title(title)
+  #
+  oufname = exou_tdir[xi]+'/track_linear.png'
+  print("saving:  ", oufname)
+  plt.savefig(oufname)
+
 
 
 

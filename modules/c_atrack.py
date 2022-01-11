@@ -126,6 +126,13 @@ class c_atrack:
         color=color
         )
   #
+  def plot_track_lin(self, color=None):
+    if color == None:
+      plt.plot(self.linposx, self.linposy)
+    else:
+      plt.plot(self.linposx, self.linposy,
+        color=color
+        )
   #
   #
 ##################################################################
