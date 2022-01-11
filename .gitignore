@@ -1,0 +1,17 @@
+# Comment ok.
+
+__pycache__/
+
+
+*.swp
+*.bak
+*~
+
+*.o
+
+.*~
+.*.bak
+.*.swp
+
+!.gitignore
+
