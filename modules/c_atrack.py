@@ -105,8 +105,13 @@ class c_atrack:
     p1 = [0, self.mean_u_dy]
     plt.plot(p0, p1)
   #
-  def plot_track(self):
-    plt.plot(self.posx, self.posy)
+  def plot_track(self, color=None):
+    if color == None:
+      plt.plot(self.posx, self.posy)
+    else:
+      plt.plot(self.posx, self.posy,
+        color=color
+        )
   #
   #
   #
