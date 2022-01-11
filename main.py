@@ -133,8 +133,14 @@ plt.plot( pos0_x, pos0_y,
   markersize=8
   )
 
+ca = fig.gca()
+
 for i in range(n_track):
   atrack[i].plot_track()
+  ca.annotate( str(atrack[i].track_id),
+    xy = (atrack[i].posx[0]+5, atrack[i].posy[0]-5)
+    )
+
 
 plt.xlim(-10, atrack[0].im_w+10 )
 plt.ylim(-10, atrack[0].im_h+10 )
