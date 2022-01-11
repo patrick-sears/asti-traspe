@@ -22,6 +22,10 @@ for l in f:
   ###
   if key == '!fname_asti_trackpy_conf':  fname_asti_trackpy_conf = ll[1]
   elif key == '!dir_asti_tp':  dir_asti_tp = ll[1]
+  elif key == '!oudir':  oudir = ll[1]
+  elif key == '!oufname1':  oufname1 = ll[1]
+  elif key == '!ougfname1':  ougfname1 = ll[1]
+  elif key == '!ougfname2':  ougfname2 = ll[1]
   else:
     print("Error.  Unrecognized key.")
     print("  key: ", key)
@@ -93,7 +97,7 @@ for i in range(n_track):
   ou += ' {0:0.3f}'.format( atrack[i].mean_u_dy )
   ou += ' {0:0.3f}'.format( atrack[i].mean_u )
   ou += '\n'
-fz = open('z01a.data', 'w')
+fz = open(oudir+'/'+oufname1, 'w')
 fz.write(ou)
 fz.close()
 
@@ -133,7 +137,7 @@ plt.gca().set_aspect('equal', adjustable='box')
 
 plt.title("scale:  um")
 
-plt.savefig('z901.png')
+plt.savefig(oudir+'/'+ougfname1)
 
 
 
@@ -171,7 +175,7 @@ plt.gca().set_aspect('equal', adjustable='box')
 
 plt.title("scale:  um/s")
 
-plt.savefig('z902.png')
+plt.savefig(oudir+'/'+ougfname2)
 
 
 
