@@ -3,7 +3,7 @@
 from modules.c_asti_trackpy_conf import c_asti_trackpy_conf
 from modules.c_atrack import c_atrack
 
-
+import math
 import sys
 from matplotlib import pyplot as plt
 
@@ -123,6 +123,27 @@ plt.savefig('z901.png')
 ##################################################################
 plt.clf()
 fig = plt.figure()
+
+n_circ_seg = 80
+n_circ_pnt = n_circ_seg + 1
+dang = math.pi * 2.0 / n_circ_seg
+circx = []
+circy = []
+r = 0.0
+while True:
+  r += 50.0
+  if r > mean_u_max:  break
+  for i in range(n_circ_pnt):
+    ang = i * dang
+    circx.append( r * math.cos(ang) )
+    circy.append( r * math.sin(ang) )
+  circx.append(None)
+  circy.append(None)
+
+axex1 = [-mean_u_max, mean_u_max, None, 0, 0]
+axey1 = [0, 0, None, -mean_u_max, mean_u_max]
+plt.plot( axex1, axey1, color="#dddddd" )
+plt.plot( circx, circy, color="#dddddd" )
 
 for i in range(n_track):
   atrack[i].plot_mean_u()
