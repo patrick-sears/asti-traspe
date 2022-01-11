@@ -8,7 +8,7 @@ wd=`pwd -P`
 
 cd "$HOME/bin"
 
-if -L [[ "$pname" ]]; then
+if [[ -L "$pname" ]]; then
   unlink "$pname"
 fi
 
