@@ -128,6 +128,11 @@ for i in range(n_track):
   atrack[i].linear_length_scale = linear_length_scale
   atrack[i].pro2()
 
+for ix in range(n_exou):
+  it = exou_i[ix]
+  oufname = exou_tdir[ix]+'/linear.data'
+  atrack[it].save_linear_data( oufname )
+
 
 ou = ''
 ou += 'i_track mean_u_dx(um/s) mean_u_dy(um/s) mean_u(um/s)\n'

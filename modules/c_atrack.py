@@ -99,6 +99,19 @@ class c_atrack:
       dotp = self.lin_dx[im] * self.lin_dx[i] + self.lin_dy[im] * self.lin_dy[i]
       dotpp = dotp / (self.lin_vmag[im] * self.lin_vmag[i])
       self.curv.append( math.acos( dotpp ) * self.linear_length_scale )
+    #
+    self.n_curv = len(self.curv)
+    #
+  #
+  def save_linear_data(self, oufname):
+    ou = ''
+    ou += 'i_lin_v curv\n'
+    for i in range(self.n_curv):
+      ou += str(i)
+      ou += ' {0:0.3f}\n'.format(self.curv[i])
+    fz = open(oufname, 'w')
+    fz.write(ou)
+    fz.close()
   #
   def plot_mean_u(self):
     p0 = [0, self.mean_u_dx]
