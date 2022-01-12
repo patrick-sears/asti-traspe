@@ -247,16 +247,24 @@ for ix in range(n_exou):
 
 
 
+################################# ccc
+# xxx
+################################# ccc
+
 
 
 
 ############################################
 # Save oufname1 data.
 ou = ''
-ou += 'i_track track_id mean_v_dx(um/s) mean_v_dy(um/s) mean_v_mag(um/s)\n'
-ou += '---\n'
-ou += 'i   id   dx       dy       v_mag\n'
-ou += '--- ---- -------- -------- -------\n'
+ou += 'Column long headings:\n'
+ou += '  i id:  i_track track_id\n'
+ou += '  dx dy:  mean_v_dx(um/s) mean_v_dy(um/s)\n'
+ou += '  v_mag:  mean_v_mag(um/s)\n'
+ou += '  curv:   mean_curv(um^-1)\n'
+ou += '------------------------------------------\n'
+ou += 'i   id   dx       dy       v_mag   curv\n'
+ou += '--- ---- -------- -------- ------- -------\n'
 for i in range(n_track):
   ou += '{0:3d}'.format(i)
   ou += ' {0:4d}'.format(atrack[i].track_id)
@@ -265,6 +273,7 @@ for i in range(n_track):
   ou += ' {0:8.3f}'.format( atrack[i].mean_v_dy )
   ou += ' {0:7.3f}'.format( atrack[i].mean_v_mag )
   #
+  ou += ' {0:7.3f}'.format( atrack[i].mean_curv )
   ou += '\n'
 fz = open(oudir+'/'+oufname1, 'w')
 fz.write(ou)
