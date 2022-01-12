@@ -7,8 +7,9 @@ import math
 import sys
 import os
 from matplotlib import pyplot as plt
+from datetime import datetime
 
-
+stime_hu = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 fname_conf = sys.argv[1]
@@ -27,6 +28,7 @@ for l in f:
   elif key == '!dir_asti_tp':  dir_asti_tp = ll[1]
   elif key == '!oudir':  oudir = ll[1]
   elif key == '!oufname1':  oufname1 = ll[1]
+  elif key == '!oufname2':  oufname2 = ll[1]
   elif key == '!ougfname1':  ougfname1 = ll[1]
   elif key == '!ougfname2':  ougfname2 = ll[1]
   elif key == '!linear_length_scale':  linear_length_scale = float(ll[1])
@@ -45,29 +47,42 @@ for l in f:
 f.close()
 ############################################
 
+flog = open(oufname2, 'w')
+flog.write("Run "+stime_hu+'\n')
+
 n_exou = len(exou_id)
 
 atp_conf = c_asti_trackpy_conf()
 atp_conf.load( dir_asti_tp+'/'+fname_asti_trackpy_conf )
 
+flog.write('\nparticle_size: '+str(atp_conf.particle_size)+'\n')
+# print("p size: ", atp_conf.particle_size)
 
-print("p size: ", atp_conf.particle_size)
 
 
+
+############################################
+# Create atrack[], read asti-trackpy data, and fill atrack[].
+print("Reading asti-trackpy data.")
+#
 atrack = []
 f = open( dir_asti_tp+'/'+atp_conf.fname_out1 )
-
 n_track = int( f.readline().strip().split(' ')[1] )
-for i in range(n_track):  atrack.append( c_atrack() )
-
-l = f.readline().strip()  # track sizes.
+print("n_track: ", n_track)
+flog.write("n_track: "+str(n_track)+'\n')
+for i in range(n_track):
+  print(".", end='', flush=True)
+  atrack.append( c_atrack() )
+print()
+#
+l = f.readline().strip()  # read track sizes.
 ll = l.split(' ')
 ts = []
 for i in range(1,len(ll)):  ts.append( int(ll[i]) )
 if len(ts) != n_track:
   print("Error.  len(ts) != n_track.")
   sys.exit(1)
-
+#
 i = -1
 for l in f:
   if not l.startswith('!'):  continue
@@ -79,8 +94,30 @@ for l in f:
     print("  i:       ", i)
     print("  i_track: ", i_track)
     sys.exit(0)
+  # atrack[i] reads its asti-trackpy data from file.
   atrack[i].load(f)
+#
+#  Done reading asti-trackpy file.
 f.close()
+############################################
+
+
+
+#################################
+# Record track IDs to log file.
+fou = ''
+fou += 'Track IDs (track_id):'  # no \n here
+n_ret = 0
+for i in range(n_track):
+  if n_ret == 0:  fou += '\n  '
+  # fou += ' '+str(atrack[i].track_id)
+  fou += ' {0:4d}'.format(atrack[i].track_id)
+  n_ret += 1
+  if n_ret == 10:  n_ret = 0
+fou += '\n'
+flog.write(fou)
+#################################
+
 
 
 
@@ -192,7 +229,14 @@ plt.savefig(oudir+'/'+ougfname1)
 
 
 
-print("n_exou: ", n_exou)
+
+# print("n_exou: ", n_exou)
+flog.write("n_exou: "+str(n_exou)+'\n')
+fou = ''
+for i in range(n_exou):
+  fou += '  track_id {0:04d}\n'.format( exou_id[i] )
+flog.write(fou)
+
 
 ##################################################################
 for xi in range(n_exou):
@@ -226,7 +270,7 @@ for xi in range(n_exou):
   plt.title(title)
   #
   oufname = exou_tdir[xi]+'/track.png'
-  print("saving:  ", oufname)
+  # print("saving:  ", oufname)
   plt.savefig(oufname)
 
 
@@ -262,7 +306,7 @@ for xi in range(n_exou):
   plt.title(title)
   #
   oufname = exou_tdir[xi]+'/track_linear.png'
-  print("saving:  ", oufname)
+  # print("saving:  ", oufname)
   plt.savefig(oufname)
 
 
