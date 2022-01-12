@@ -29,6 +29,7 @@ for l in f:
   elif key == '!oudir':  oudir = ll[1]
   elif key == '!oufname1':  oufname1 = ll[1]
   elif key == '!oufname2':  oufname2 = ll[1]
+  elif key == '!ousfname1':  ousfname1 = ll[1]
   elif key == '!ougfname1':  ougfname1 = ll[1]
   elif key == '!ougfname2':  ougfname2 = ll[1]
   elif key == '!linear_length_scale':  linear_length_scale = float(ll[1])
@@ -239,6 +240,41 @@ for i in range(n_exou):
 flog.write(fou)
 
 
+
+############################################
+# Calculate and save summary data.
+# ats:  all track summary
+ats_mean_v_dx = 0.0
+ats_mean_v_dy = 0.0
+for i in range(n_track):
+  ats_mean_v_dx += atrack[i].mean_v_dx
+  ats_mean_v_dy += atrack[i].mean_v_dy
+ats_mean_v_dx /= n_track
+ats_mean_v_dy /= n_track
+ats_mean_v_mag = math.hypot(ats_mean_v_dx, ats_mean_v_dy)
+ats_mean_u_dx = ats_mean_v_dx / ats_mean_v_mag
+ats_mean_u_dy = ats_mean_v_dy / ats_mean_v_mag
+ats_mean_u_mag = math.hypot(ats_mean_u_dx, ats_mean_u_dy)
+# ats_mean_u_mag should be 1.000.
+# I'm still outputting it to the file as both a check and a
+# reminder.
+ou = ''
+ou += 'n_track: '+str(n_track)+'\n'
+ou += '\n'
+ou += 'ats_mean_v_dx (um/s):  {0:8.3f}\n'.format(ats_mean_v_dx)
+ou += 'ats_mean_v_dy (um/s):  {0:8.3f}\n'.format(ats_mean_v_dy)
+ou += 'ats_mean_v_mag (um/s): {0:8.3f}\n'.format(ats_mean_v_mag)
+ou += 'ats_mean_u_dx (um/s):  {0:8.3f}\n'.format(ats_mean_u_dx)
+ou += 'ats_mean_u_dy (um/s):  {0:8.3f}\n'.format(ats_mean_u_dy)
+ou += 'ats_mean_u_mag (um/s): {0:8.3f}\n'.format(ats_mean_u_mag)
+ou += '\n\n'
+#
+fz = open(ousfname1, 'w')
+fz.write(ou)
+fz.close()
+############################################
+
+
 ##################################################################
 for xi in range(n_exou):
   i = exou_i[xi]
@@ -273,6 +309,7 @@ for xi in range(n_exou):
   oufname = exou_tdir[xi]+'/track.png'
   # print("saving:  ", oufname)
   plt.savefig(oufname)
+
 
 
 ##################################################################
