@@ -317,13 +317,20 @@ flog.write(fou)
 
 
 
+###########
+# Calculate the length of all particle tracks, end to end.
+# This will be used to weight some means of per-track
+# measurements.
+all_track_sum_length = 0.0
+for i in range(n_track):
+  all_track_sum_length += atrack[i].sum_length
+###########
 
 
 
 
-
-############################################
-# Calculate and save summary data.
+############################################ &&&
+# Calculate ats data.
 # ats:  all track summary
 ats_mean_v_dx = 0.0
 ats_mean_v_dy = 0.0
@@ -339,15 +346,31 @@ ats_mean_u_mag = math.hypot(ats_mean_u_dx, ats_mean_u_dy)
 # ats_mean_u_mag should be 1.000.
 # I'm still outputting it to the file as both a check and a
 # reminder.
+#
+# The ats_mean_curv will be weighted by track length.
+# One reason to do this is that some tracks get cut
+# into many smaller tracks.  This happens if trackpy
+# has trouble seeing the particles.
+ats_wmean_curv = 0.0
+for i in range(n_track):
+  ats_wmean_curv += atrack[i].mean_curv * atrack[i].sum_length
+ats_wmean_curv /= all_track_sum_length
+############################################ &&&
+
+
+
+############################################
+# Save ats data (summary data).
 ou = ''
 ou += 'n_track: '+str(n_track)+'\n'
 ou += '\n'
-ou += 'ats_mean_v_dx (um/s):  {0:8.3f}\n'.format(ats_mean_v_dx)
-ou += 'ats_mean_v_dy (um/s):  {0:8.3f}\n'.format(ats_mean_v_dy)
-ou += 'ats_mean_v_mag (um/s): {0:8.3f}\n'.format(ats_mean_v_mag)
-ou += 'ats_mean_u_dx (um/s):  {0:8.3f}\n'.format(ats_mean_u_dx)
-ou += 'ats_mean_u_dy (um/s):  {0:8.3f}\n'.format(ats_mean_u_dy)
-ou += 'ats_mean_u_mag (um/s): {0:8.3f}\n'.format(ats_mean_u_mag)
+ou += 'ats_mean_v_dx (um/s):   {0:8.3f}\n'.format(ats_mean_v_dx)
+ou += 'ats_mean_v_dy (um/s):   {0:8.3f}\n'.format(ats_mean_v_dy)
+ou += 'ats_mean_v_mag (um/s):  {0:8.3f}\n'.format(ats_mean_v_mag)
+ou += 'ats_mean_u_dx (um/s):   {0:8.3f}\n'.format(ats_mean_u_dx)
+ou += 'ats_mean_u_dy (um/s):   {0:8.3f}\n'.format(ats_mean_u_dy)
+ou += 'ats_mean_u_mag (um/s):  {0:8.3f}\n'.format(ats_mean_u_mag)
+ou += 'ats_wmean_curv (um^-1): {0:8.3f}\n'.format(ats_wmean_curv)
 ou += '\n\n'
 #
 fz = open(ousfname1, 'w')

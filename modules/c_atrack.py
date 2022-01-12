@@ -57,6 +57,15 @@ class c_atrack:
     #
     self.mean_u_dx = self.mean_v_dx / self.mean_v_mag
     self.mean_u_dy = self.mean_v_dy / self.mean_v_mag
+    #
+    # The "sum_length" is the sum of each displacement.
+    self.sum_length = 0.0
+    for ib in range(1, self.n_pos):
+      ia = ib-1
+      dx = self.posx[ib] - self.posx[ia]
+      dy = self.posy[ib] - self.posy[ia]
+      d  = math.hypot(dx,dy)
+      self.sum_length += d
   #
   def pro2(self):
     lls2 = self.linear_length_scale**2
