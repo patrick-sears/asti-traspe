@@ -207,18 +207,25 @@ for ix in range(n_exou):
   atrack[it].save_linear_data( oufname )
 
 
+############################################
 ou = ''
-ou += 'i_track mean_v_dx(um/s) mean_v_dy(um/s) mean_v_mag(um/s)\n'
+ou += 'i_track track_id mean_v_dx(um/s) mean_v_dy(um/s) mean_v_mag(um/s)\n'
+ou += '---\n'
+ou += 'i   id   dx       dy       v_mag\n'
+ou += '--- ---- -------- -------- -------\n'
 for i in range(n_track):
-  ou += str(i)
-  ou += ' '+str(atrack[i].track_id)
-  ou += ' {0:0.3f}'.format( atrack[i].mean_v_dx )
-  ou += ' {0:0.3f}'.format( atrack[i].mean_v_dy )
-  ou += ' {0:0.3f}'.format( atrack[i].mean_v_mag )
+  ou += '{0:3d}'.format(i)
+  ou += ' {0:4d}'.format(atrack[i].track_id)
+  #
+  ou += ' {0:8.3f}'.format( atrack[i].mean_v_dx )
+  ou += ' {0:8.3f}'.format( atrack[i].mean_v_dy )
+  ou += ' {0:7.3f}'.format( atrack[i].mean_v_mag )
+  #
   ou += '\n'
 fz = open(oudir+'/'+oufname1, 'w')
 fz.write(ou)
 fz.close()
+############################################
 
 
 mean_v_max  = atrack[0].mean_v_mag
