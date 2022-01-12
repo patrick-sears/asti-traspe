@@ -67,13 +67,19 @@ for l in f:
   elif key == '!exou_dir':  exou_dir = ll[1]
   elif key == '!expected_v_ang':
     expected_ux, expected_uy = read_expected_v_ang( ll[1], ll[2] )
+  elif key == '!use_exou':
+    n_exou = 0
+    if ll[1] == '1':  use_exou = True
+    else:             use_exou = False
   elif key == '!exou_id':
     for l in f:
       l = l.strip()
       if len(l) == 0:  break
-      if l[0] == '#':  break
-      ll = l.split(' ')
-      exou_id.append( int(ll[0]) )
+      if l[0] == '#':  continue
+      lu = l.split('#')
+      ll = lu[0].strip().split(' ')
+      for val_str in ll:
+        exou_id.append( int(val_str) )
     n_exou = len(exou_id)
   else:
     print("Error.  Unrecognized key.")
@@ -194,25 +200,26 @@ for i in range(n_track):
 
 ############################################ ^^^
 # Create exou output dirs.
-exou_i = []
-exou_tdir = [] # track dir
-for i in range(n_exou):
-  exou_i.append( None )
-  exou_tdir.append ( exou_dir+'/{0:04d}'.format( exou_id[i] ) )
-  if not os.path.exists( exou_tdir[i] ):
-    os.mkdir( exou_tdir[i] )
-  #
-  found = False
-  for j in range(n_track):
-    if exou_id[i] == atrack[j].track_id:
-      found = True
-      exou_i[i] = j
-      break
-  if not found:
-    print("Error.")
-    print("  An exou_id was not found.")
-    print("  exou_id: ", exou_id)
-    sys.exit(1)
+if use_exou:
+  exou_i = []
+  exou_tdir = [] # track dir
+  for i in range(n_exou):
+    exou_i.append( None )
+    exou_tdir.append ( exou_dir+'/{0:04d}'.format( exou_id[i] ) )
+    if not os.path.exists( exou_tdir[i] ):
+      os.mkdir( exou_tdir[i] )
+    #
+    found = False
+    for j in range(n_track):
+      if exou_id[i] == atrack[j].track_id:
+        found = True
+        exou_i[i] = j
+        break
+    if not found:
+      print("Error.")
+      print("  An exou_id was not found.")
+      print("  exou_id: ", exou_id)
+      sys.exit(1)
 ############################################ ^^^
 
 
@@ -239,10 +246,11 @@ for i in range(n_track):
   atrack[i].linear_length_scale = linear_length_scale
   atrack[i].pro2()
 
-for ix in range(n_exou):
-  it = exou_i[ix]
-  oufname = exou_tdir[ix]+'/linear.data'
-  atrack[it].save_linear_data( oufname )
+if use_exou:
+  for ix in range(n_exou):
+    it = exou_i[ix]
+    oufname = exou_tdir[ix]+'/linear.data'
+    atrack[it].save_linear_data( oufname )
 ################################# <===>
 
 
@@ -307,6 +315,7 @@ for i in range(n_track):
 
 ###########
 # print("n_exou: ", n_exou)
+# Can be left like this even if use_exou == False.
 flog.write("n_exou: "+str(n_exou)+'\n')
 fou = ''
 for i in range(n_exou):
@@ -476,78 +485,84 @@ plt.savefig(oudir+'/'+ougfname2)
 ##################################################################
 ### !graph #######################################################
 # The exou tracks.
-for xi in range(n_exou):
-  i = exou_i[xi]
-  #
-  plt.clf()
-  fig = plt.figure()
-  #
-  plt.plot( [pos0_x[i]], [pos0_y[i]],
-    linestyle='none',
-    marker='o',
-    markeredgecolor='#000000',
-    markerfacecolor='none',
-    markersize=8
-    )
-  #
-  ca = fig.gca()
-  #
-  for j in range(n_track):
-    if j == i:  continue
-    atrack[j].plot_track(color='#cccccc')
-  #
-  # Plot the track of interest on top.
-  atrack[i].plot_track(color='#990000')
-  #
-  plt.xlim(-10, atrack[0].im_w+10 )
-  plt.ylim(-10, atrack[0].im_h+10 )
-  plt.gca().set_aspect('equal', adjustable='box')
-  #
-  title = "track_id "+str(exou_id[xi])+", scale: um."
-  plt.title(title)
-  #
-  oufname = exou_tdir[xi]+'/track.png'
-  # print("saving:  ", oufname)
-  plt.savefig(oufname)
+if use_exou:
+  ################### ggg
+  for xi in range(n_exou):
+    i = exou_i[xi]
+    #
+    plt.clf()
+    fig = plt.figure()
+    #
+    plt.plot( [pos0_x[i]], [pos0_y[i]],
+      linestyle='none',
+      marker='o',
+      markeredgecolor='#000000',
+      markerfacecolor='none',
+      markersize=8
+      )
+    #
+    ca = fig.gca()
+    #
+    for j in range(n_track):
+      if j == i:  continue
+      atrack[j].plot_track(color='#cccccc')
+    #
+    # Plot the track of interest on top.
+    atrack[i].plot_track(color='#990000')
+    #
+    plt.xlim(-10, atrack[0].im_w+10 )
+    plt.ylim(-10, atrack[0].im_h+10 )
+    plt.gca().set_aspect('equal', adjustable='box')
+    #
+    title = "track_id "+str(exou_id[xi])+", scale: um."
+    plt.title(title)
+    #
+    oufname = exou_tdir[xi]+'/track.png'
+    # print("saving:  ", oufname)
+    plt.savefig(oufname)
+  ################### ggg
 
 
 
 ##################################################################
 ### !graph #######################################################
 # The exou linearised tracks.
-for xi in range(n_exou):
-  i = exou_i[xi]
-  #
-  plt.clf()
-  fig = plt.figure()
-  #
-  plt.plot( [pos0_x[i]], [pos0_y[i]],
-    linestyle='none',
-    marker='o',
-    markeredgecolor='#000000',
-    markerfacecolor='none',
-    markersize=8
-    )
-  #
-  ca = fig.gca()
-  #
-  for j in range(n_track):
-    if j == i:  continue
-    atrack[j].plot_track_lin(color='#cccccc')
-  #
-  # Plot the track of interest on top.
-  atrack[i].plot_track_lin(color='#990000')
-  #
-  plt.xlim(-10, atrack[0].im_w+10 )
-  plt.ylim(-10, atrack[0].im_h+10 )
-  plt.gca().set_aspect('equal', adjustable='box')
-  #
-  title = "track_id "+str(exou_id[xi])+", scale: um."
-  plt.title(title)
-  #
-  oufname = exou_tdir[xi]+'/track_linear.png'
-  # print("saving:  ", oufname)
-  plt.savefig(oufname)
+if use_exou:
+  ################### ggg
+  for xi in range(n_exou):
+    i = exou_i[xi]
+    #
+    plt.clf()
+    fig = plt.figure()
+    #
+    plt.plot( [pos0_x[i]], [pos0_y[i]],
+      linestyle='none',
+      marker='o',
+      markeredgecolor='#000000',
+      markerfacecolor='none',
+      markersize=8
+      )
+    #
+    ca = fig.gca()
+    #
+    for j in range(n_track):
+      if j == i:  continue
+      atrack[j].plot_track_lin(color='#cccccc')
+    #
+    # Plot the track of interest on top.
+    atrack[i].plot_track_lin(color='#990000')
+    #
+    plt.xlim(-10, atrack[0].im_w+10 )
+    plt.ylim(-10, atrack[0].im_h+10 )
+    plt.gca().set_aspect('equal', adjustable='box')
+    #
+    title = "track_id "+str(exou_id[xi])+", scale: um."
+    plt.title(title)
+    #
+    oufname = exou_tdir[xi]+'/track_linear.png'
+    # print("saving:  ", oufname)
+    plt.savefig(oufname)
+  ################### ggg
 
 
 
