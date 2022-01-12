@@ -100,7 +100,7 @@ atp_conf.load( dir_asti_tp+'/'+fname_asti_trackpy_conf )
 
 ###################### fff
 # Open the log file and write some initial stuff.
-flog = open(oufname2, 'w')
+flog = open(oudir+'/'+oufname2, 'w')
 flog.write("Run "+stime_hu+'\n\n')
 
 flog.write('\nparticle_size: '+str(atp_conf.particle_size)+'\n')
