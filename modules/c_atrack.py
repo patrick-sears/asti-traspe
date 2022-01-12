@@ -49,11 +49,11 @@ class c_atrack:
     self.delta_t = (self.n_pos-1) * self.s_per_frame
     self.delta_x = self.posx[ self.n_pos-1 ] - self.posx[0]
     self.delta_y = self.posy[ self.n_pos-1 ] - self.posy[0]
-    self.mean_u_dx = self.delta_x / self.delta_t
-    self.mean_u_dy = self.delta_y / self.delta_t
+    self.mean_v_dx = self.delta_x / self.delta_t
+    self.mean_v_dy = self.delta_y / self.delta_t
     #
-    self.mean_u2 = self.mean_u_dx**2 + self.mean_u_dy**2
-    self.mean_u  = math.sqrt( self.mean_u2 )
+    self.mean_v_mag2 = self.mean_v_dx**2 + self.mean_v_dy**2
+    self.mean_v_mag  = math.sqrt( self.mean_v_mag2 )
   #
   def pro2(self):
     lls2 = self.linear_length_scale**2
@@ -113,9 +113,9 @@ class c_atrack:
     fz.write(ou)
     fz.close()
   #
-  def plot_mean_u(self):
-    p0 = [0, self.mean_u_dx]
-    p1 = [0, self.mean_u_dy]
+  def plot_mean_v(self):
+    p0 = [0, self.mean_v_dx]
+    p1 = [0, self.mean_v_dy]
     plt.plot(p0, p1)
   #
   def plot_track(self, color=None):

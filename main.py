@@ -172,24 +172,25 @@ for ix in range(n_exou):
 
 
 ou = ''
-ou += 'i_track mean_u_dx(um/s) mean_u_dy(um/s) mean_u(um/s)\n'
+ou += 'i_track mean_v_dx(um/s) mean_v_dy(um/s) mean_v_mag(um/s)\n'
 for i in range(n_track):
   ou += str(i)
-  ou += ' {0:0.3f}'.format( atrack[i].mean_u_dx )
-  ou += ' {0:0.3f}'.format( atrack[i].mean_u_dy )
-  ou += ' {0:0.3f}'.format( atrack[i].mean_u )
+  ou += ' '+str(atrack[i].track_id)
+  ou += ' {0:0.3f}'.format( atrack[i].mean_v_dx )
+  ou += ' {0:0.3f}'.format( atrack[i].mean_v_dy )
+  ou += ' {0:0.3f}'.format( atrack[i].mean_v_mag )
   ou += '\n'
 fz = open(oudir+'/'+oufname1, 'w')
 fz.write(ou)
 fz.close()
 
 
-mean_u_max  = atrack[0].mean_u
+mean_v_max  = atrack[0].mean_v_mag
 
 
 for i in range(1, n_track):
-  if atrack[i].mean_u > mean_u_max:
-    mean_u_max = atrack[i].mean_u
+  if atrack[i].mean_v_mag > mean_v_max:
+    mean_v_max = atrack[i].mean_v_mag
 
 
 pos0_x = []
@@ -324,7 +325,7 @@ circy = []
 r = 0.0
 while True:
   r += 50.0
-  if r > mean_u_max:  break
+  if r > mean_v_max:  break
   for i in range(n_circ_pnt):
     ang = i * dang
     circx.append( r * math.cos(ang) )
@@ -332,16 +333,16 @@ while True:
   circx.append(None)
   circy.append(None)
 
-axex1 = [-mean_u_max, mean_u_max, None, 0, 0]
-axey1 = [0, 0, None, -mean_u_max, mean_u_max]
+axex1 = [-mean_v_max, mean_v_max, None, 0, 0]
+axey1 = [0, 0, None, -mean_v_max, mean_v_max]
 plt.plot( axex1, axey1, color="#dddddd" )
 plt.plot( circx, circy, color="#dddddd" )
 
 for i in range(n_track):
-  atrack[i].plot_mean_u()
+  atrack[i].plot_mean_v()
 
-plt.xlim( -mean_u_max-10, mean_u_max+10 )
-plt.ylim( -mean_u_max-10, mean_u_max+10 )
+plt.xlim( -mean_v_max-10, mean_v_max+10 )
+plt.ylim( -mean_v_max-10, mean_v_max+10 )
 plt.gca().set_aspect('equal', adjustable='box')
 
 plt.title("scale:  um/s")
