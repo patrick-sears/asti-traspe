@@ -341,6 +341,13 @@ axey1 = [0, 0, None, -mean_v_max, mean_v_max]
 plt.plot( axex1, axey1, color="#dddddd" )
 plt.plot( circx, circy, color="#dddddd" )
 
+gra_expect_ux = [0, mean_v_max * expected_ux]
+gra_expect_uy = [0, mean_v_max * expected_uy]
+plt.plot(gra_expect_ux, gra_expect_uy,
+  color='#aaffaa',
+  linewidth=3.0
+  )
+
 for i in range(n_track):
   atrack[i].plot_mean_v()
 
