@@ -14,6 +14,8 @@ stime_hu = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 fname_conf = sys.argv[1]
 
+
+
 ######################
 def read_expected_v_ang(val_type, val_str):
   #
@@ -40,9 +42,12 @@ def read_expected_v_ang(val_type, val_str):
 ######################
 
 
+
+
 exou_id = []
 
 ############################################
+# Read the asti-trapse config file.
 f = open( fname_conf )
 for l in f:
   if not l.startswith('!'):  continue
@@ -69,6 +74,7 @@ for l in f:
       if l[0] == '#':  break
       ll = l.split(' ')
       exou_id.append( int(ll[0]) )
+    n_exou = len(exou_id)
   else:
     print("Error.  Unrecognized key.")
     print("  key: ", key)
@@ -76,28 +82,40 @@ for l in f:
 f.close()
 ############################################
 
+
+
+#################################
+# Read the asti-trackpy config file.
+atp_conf = c_asti_trackpy_conf()
+atp_conf.load( dir_asti_tp+'/'+fname_asti_trackpy_conf )
+#################################
+
+
+
+###################### fff
+# Open the log file and write some initial stuff.
 flog = open(oufname2, 'w')
 flog.write("Run "+stime_hu+'\n\n')
+
+flog.write('\nparticle_size: '+str(atp_conf.particle_size)+'\n')
 
 fou = ''
 fou += 'expected ux uy:'
 fou += ' {0:0.3f}'.format(expected_ux)
 fou += ' {0:0.3f}'.format(expected_uy)
 fou += '\n'
+
+fou += 'particle_size: '+str(atp_conf.particle_size)+'\n'
 flog.write(fou)
-
-n_exou = len(exou_id)
-
-atp_conf = c_asti_trackpy_conf()
-atp_conf.load( dir_asti_tp+'/'+fname_asti_trackpy_conf )
-
-flog.write('\nparticle_size: '+str(atp_conf.particle_size)+'\n')
-# print("p size: ", atp_conf.particle_size)
+###################### fff
 
 
 
 
-############################################
+
+
+
+############################################ <***>
 # Create atrack[], read asti-trackpy data, and fill atrack[].
 print("Reading asti-trackpy data.")
 #
@@ -135,7 +153,8 @@ for l in f:
 #
 #  Done reading asti-trackpy file.
 f.close()
-############################################
+############################################ <***>
+
 
 
 
@@ -157,13 +176,24 @@ flog.write(fou)
 
 
 
+######################
+# Check to make sure the number of particle positions
+# for each track from the start of the asti-trackpy file
+# matches the number of positions each atrack[i] actually
+# loaded.
 for i in range(n_track):
   if atrack[i].n_pos != ts[i]:
     print("Error.")
     print("  atrack[i].n_pos != ts[i].")
     print("  i:  ", i)
     sys.exit(1)
+######################
 
+
+
+
+############################################ ^^^
+# Create exou output dirs.
 exou_i = []
 exou_tdir = [] # track dir
 for i in range(n_exou):
@@ -183,9 +213,11 @@ for i in range(n_exou):
     print("  An exou_id was not found.")
     print("  exou_id: ", exou_id)
     sys.exit(1)
+############################################ ^^^
 
 
-
+#################################
+# Copy asti-tackpy settings to each atrack[i].
 for i in range(n_track):
   atrack[i].set_im_params(
     atp_conf.um_per_pix,
@@ -193,7 +225,13 @@ for i in range(n_track):
     atp_conf.im_w,
     atp_conf.im_h
     )
+#################################
 
+
+
+
+################################# <===>
+# Run the atrack processing functions.
 for i in range(n_track):
   atrack[i].pro1()
 
@@ -205,9 +243,15 @@ for ix in range(n_exou):
   it = exou_i[ix]
   oufname = exou_tdir[ix]+'/linear.data'
   atrack[it].save_linear_data( oufname )
+################################# <===>
+
+
+
+
 
 
 ############################################
+# Save oufname1 data.
 ou = ''
 ou += 'i_track track_id mean_v_dx(um/s) mean_v_dy(um/s) mean_v_mag(um/s)\n'
 ou += '---\n'
@@ -228,27 +272,44 @@ fz.close()
 ############################################
 
 
+
+################################# ---
+# Find the maximum velocity.
+# For graphing.
 mean_v_max  = atrack[0].mean_v_mag
-
-
 for i in range(1, n_track):
   if atrack[i].mean_v_mag > mean_v_max:
     mean_v_max = atrack[i].mean_v_mag
+################################# ---
 
 
+
+######################
+# Record the first position for each track.
+# This is only for graphing tacks and marking
+# where they start.
 pos0_x = []
 pos0_y = []
 for i in range(n_track):
   pos0_x.append( atrack[i].posx[0] )
   pos0_y.append( atrack[i].posy[0] )
+######################
 
 
+###########
 # print("n_exou: ", n_exou)
 flog.write("n_exou: "+str(n_exou)+'\n')
 fou = ''
 for i in range(n_exou):
   fou += '  track_id {0:04d}\n'.format( exou_id[i] )
 flog.write(fou)
+###########
+
+
+
+
+
+
 
 
 
