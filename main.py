@@ -55,7 +55,10 @@ for l in f:
   ll = l.split(' ')
   key = ll[0]
   ###
-  if key == '!fname_asti_trackpy_conf':  fname_asti_trackpy_conf = ll[1]
+  if key == '!run_name':
+    run_name = ll[1]
+    print("run_name: ", run_name)
+  elif key == '!fname_asti_trackpy_conf':  fname_asti_trackpy_conf = ll[1]
   elif key == '!dir_asti_tp':  dir_asti_tp = ll[1]
   elif key == '!oudir':  oudir = ll[1]
   elif key == '!oufname1':  oufname1 = ll[1]
@@ -101,7 +104,9 @@ atp_conf.load( dir_asti_tp+'/'+fname_asti_trackpy_conf )
 ###################### fff
 # Open the log file and write some initial stuff.
 flog = open(oudir+'/'+oufname2, 'w')
-flog.write("Run "+stime_hu+'\n\n')
+flog.write("Run time: "+stime_hu+'\n')
+flog.write("Run name: "+run_name+'\n')
+flog.write('\n')
 
 flog.write('\nparticle_size: '+str(atp_conf.particle_size)+'\n')
 
