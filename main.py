@@ -382,7 +382,7 @@ ou += 'ats_mean_u_mag (um/s):  {0:8.3f}\n'.format(ats_mean_u_mag)
 ou += 'ats_wmean_curv (um^-1): {0:8.3f}\n'.format(ats_wmean_curv)
 ou += '\n\n'
 #
-fz = open(ousfname1, 'w')
+fz = open(oudir+'/'+ousfname1, 'w')
 fz.write(ou)
 fz.close()
 ############################################
