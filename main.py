@@ -236,37 +236,6 @@ for i in range(n_track):
   pos0_y.append( atrack[i].posy[0] )
 
 
-##################################################################
-fig = plt.figure()
-
-plt.plot( pos0_x, pos0_y,
-  linestyle='none',
-  marker='o',
-  markeredgecolor='#000000',
-  markerfacecolor='none',
-  markersize=8
-  )
-
-ca = fig.gca()
-
-for i in range(n_track):
-  atrack[i].plot_track()
-  ca.annotate( str(atrack[i].track_id),
-    xy = (atrack[i].posx[0]+5, atrack[i].posy[0]-5)
-    )
-
-
-plt.xlim(-10, atrack[0].im_w+10 )
-plt.ylim(-10, atrack[0].im_h+10 )
-plt.gca().set_aspect('equal', adjustable='box')
-
-plt.title("scale:  um")
-
-plt.savefig(oudir+'/'+ougfname1)
-
-
-
-
 # print("n_exou: ", n_exou)
 flog.write("n_exou: "+str(n_exou)+'\n')
 fou = ''
@@ -310,7 +279,87 @@ fz.close()
 ############################################
 
 
+
+
+
 ##################################################################
+### !graph #######################################################
+# The tracks.
+fig = plt.figure()
+
+plt.plot( pos0_x, pos0_y,
+  linestyle='none',
+  marker='o',
+  markeredgecolor='#000000',
+  markerfacecolor='none',
+  markersize=8
+  )
+
+ca = fig.gca()
+
+for i in range(n_track):
+  atrack[i].plot_track()
+  ca.annotate( str(atrack[i].track_id),
+    xy = (atrack[i].posx[0]+5, atrack[i].posy[0]-5)
+    )
+
+
+plt.xlim(-10, atrack[0].im_w+10 )
+plt.ylim(-10, atrack[0].im_h+10 )
+plt.gca().set_aspect('equal', adjustable='box')
+
+plt.title("scale:  um")
+
+plt.savefig(oudir+'/'+ougfname1)
+
+
+
+##################################################################
+### !graph #######################################################
+# The velocity vectors.
+plt.clf()
+fig = plt.figure()
+
+n_circ_seg = 80
+n_circ_pnt = n_circ_seg + 1
+dang = math.pi * 2.0 / n_circ_seg
+circx = []
+circy = []
+r = 0.0
+while True:
+  r += 50.0
+  if r > mean_v_max:  break
+  for i in range(n_circ_pnt):
+    ang = i * dang
+    circx.append( r * math.cos(ang) )
+    circy.append( r * math.sin(ang) )
+  circx.append(None)
+  circy.append(None)
+
+axex1 = [-mean_v_max, mean_v_max, None, 0, 0]
+axey1 = [0, 0, None, -mean_v_max, mean_v_max]
+plt.plot( axex1, axey1, color="#dddddd" )
+plt.plot( circx, circy, color="#dddddd" )
+
+for i in range(n_track):
+  atrack[i].plot_mean_v()
+
+plt.xlim( -mean_v_max-10, mean_v_max+10 )
+plt.ylim( -mean_v_max-10, mean_v_max+10 )
+plt.gca().set_aspect('equal', adjustable='box')
+
+plt.title("scale:  um/s")
+
+plt.savefig(oudir+'/'+ougfname2)
+
+
+
+
+
+
+##################################################################
+### !graph #######################################################
+# The exou tracks.
 for xi in range(n_exou):
   i = exou_i[xi]
   #
@@ -348,6 +397,8 @@ for xi in range(n_exou):
 
 
 ##################################################################
+### !graph #######################################################
+# The exou linearised tracks.
 for xi in range(n_exou):
   i = exou_i[xi]
   #
@@ -386,43 +437,9 @@ for xi in range(n_exou):
 
 
 ##################################################################
-plt.clf()
-fig = plt.figure()
-
-n_circ_seg = 80
-n_circ_pnt = n_circ_seg + 1
-dang = math.pi * 2.0 / n_circ_seg
-circx = []
-circy = []
-r = 0.0
-while True:
-  r += 50.0
-  if r > mean_v_max:  break
-  for i in range(n_circ_pnt):
-    ang = i * dang
-    circx.append( r * math.cos(ang) )
-    circy.append( r * math.sin(ang) )
-  circx.append(None)
-  circy.append(None)
-
-axex1 = [-mean_v_max, mean_v_max, None, 0, 0]
-axey1 = [0, 0, None, -mean_v_max, mean_v_max]
-plt.plot( axex1, axey1, color="#dddddd" )
-plt.plot( circx, circy, color="#dddddd" )
-
-for i in range(n_track):
-  atrack[i].plot_mean_v()
-
-plt.xlim( -mean_v_max-10, mean_v_max+10 )
-plt.ylim( -mean_v_max-10, mean_v_max+10 )
-plt.gca().set_aspect('equal', adjustable='box')
-
-plt.title("scale:  um/s")
-
-plt.savefig(oudir+'/'+ougfname2)
-
-
-
+### !graph #######################################################
+# End of graphs.
+##################################################################
 
 
 
