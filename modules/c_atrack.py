@@ -119,7 +119,7 @@ class c_atrack:
   def plot_mean_v(self):
     p0 = [0, self.mean_v_dx]
     p1 = [0, self.mean_v_dy]
-    plt.plot(p0, p1)
+    plt.plot(p0, p1, color='#333333')
   #
   def plot_track(self, color=None):
     if color == None:

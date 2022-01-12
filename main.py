@@ -344,6 +344,15 @@ plt.plot( circx, circy, color="#dddddd" )
 for i in range(n_track):
   atrack[i].plot_mean_v()
 
+
+gra_mean_v_x = [0, ats_mean_v_dx]
+gra_mean_v_y = [0, ats_mean_v_dy]
+plt.plot(gra_mean_v_x, gra_mean_v_y,
+  color='#ff0000',
+  linewidth=3.0
+  )
+
+
 plt.xlim( -mean_v_max-10, mean_v_max+10 )
 plt.ylim( -mean_v_max-10, mean_v_max+10 )
 plt.gca().set_aspect('equal', adjustable='box')
