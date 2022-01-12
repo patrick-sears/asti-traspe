@@ -54,6 +54,9 @@ class c_atrack:
     #
     self.mean_v_mag2 = self.mean_v_dx**2 + self.mean_v_dy**2
     self.mean_v_mag  = math.sqrt( self.mean_v_mag2 )
+    #
+    self.mean_u_dx = self.mean_v_dx / self.mean_v_mag
+    self.mean_u_dy = self.mean_v_dy / self.mean_v_mag
   #
   def pro2(self):
     lls2 = self.linear_length_scale**2

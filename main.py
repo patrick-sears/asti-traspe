@@ -14,6 +14,32 @@ stime_hu = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 fname_conf = sys.argv[1]
 
+######################
+def read_expected_v_ang(val_type, val_str):
+  #
+  if val_type == 'math_deg':
+    ang1 = float(val_str)
+    ang = ang1 * math.pi / 180.0
+  elif val_type == 'geo_deg':
+    ang1 = float(val_str)
+    ang = (90.0 - ang1) * math.pi / 180.0
+  elif val_type == 'geo_name':
+    dict = {  'N':0,   'NE':45,  'E':90,  'SE':135,
+              'S':180, 'NW':-45, 'W':-90, 'SW':-135 }
+    ang1 = dict[val_str]
+    ang = (90.0 - ang1) * math.pi / 180.0
+  else:
+    print("Error in read_expected_v_ang.")
+    print("  val_type: ", val_type)
+    print("  val_str:  ", val_str)
+    sys.exit(1)
+  #
+  ux = math.cos( ang )
+  uy = math.sin( ang )
+  return ux, uy
+######################
+
+
 exou_id = []
 
 ############################################
@@ -34,6 +60,8 @@ for l in f:
   elif key == '!ougfname2':  ougfname2 = ll[1]
   elif key == '!linear_length_scale':  linear_length_scale = float(ll[1])
   elif key == '!exou_dir':  exou_dir = ll[1]
+  elif key == '!expected_v_ang':
+    expected_ux, expected_uy = read_expected_v_ang( ll[1], ll[2] )
   elif key == '!exou_id':
     for l in f:
       l = l.strip()
@@ -49,7 +77,14 @@ f.close()
 ############################################
 
 flog = open(oufname2, 'w')
-flog.write("Run "+stime_hu+'\n')
+flog.write("Run "+stime_hu+'\n\n')
+
+fou = ''
+fou += 'expected ux uy:'
+fou += ' {0:0.3f}'.format(expected_ux)
+fou += ' {0:0.3f}'.format(expected_uy)
+fou += '\n'
+flog.write(fou)
 
 n_exou = len(exou_id)
 
