@@ -377,6 +377,20 @@ ats_wmean_curv = 0.0
 for i in range(n_track):
   ats_wmean_curv += atrack[i].mean_curv * atrack[i].sum_length
 ats_wmean_curv /= all_track_sum_length
+#
+# Calculate how well aligned the tracks are independent
+# of the speed.  I.e. the mean of the unit vectors.
+# It is the "alignment vector".  Note it is not a unit
+# vector.
+ats_v_align_dx = 0.0
+ats_v_align_dy = 0.0
+ats_v_align_mag = 0.0
+for i in range(n_track):
+  ats_v_align_dx += atrack[i].mean_u_dx
+  ats_v_align_dy += atrack[i].mean_u_dy
+ats_v_align_dx /= n_track
+ats_v_align_dy /= n_track
+ats_v_align_mag = math.hypot( ats_v_align_dx, ats_v_align_dy )
 ############################################ &&&
 
 
@@ -386,13 +400,14 @@ ats_wmean_curv /= all_track_sum_length
 ou = ''
 ou += 'n_track: '+str(n_track)+'\n'
 ou += '\n'
-ou += 'ats_mean_v_dx (um/s):   {0:8.3f}\n'.format(ats_mean_v_dx)
-ou += 'ats_mean_v_dy (um/s):   {0:8.3f}\n'.format(ats_mean_v_dy)
-ou += 'ats_mean_v_mag (um/s):  {0:8.3f}\n'.format(ats_mean_v_mag)
-ou += 'ats_mean_u_dx (um/s):   {0:8.3f}\n'.format(ats_mean_u_dx)
-ou += 'ats_mean_u_dy (um/s):   {0:8.3f}\n'.format(ats_mean_u_dy)
-ou += 'ats_mean_u_mag (um/s):  {0:8.3f}\n'.format(ats_mean_u_mag)
-ou += 'ats_wmean_curv (um^-1): {0:8.3f}\n'.format(ats_wmean_curv)
+ou += 'ats_mean_v_dx (um/s):    {0:8.3f}\n'.format(ats_mean_v_dx)
+ou += 'ats_mean_v_dy (um/s):    {0:8.3f}\n'.format(ats_mean_v_dy)
+ou += 'ats_mean_v_mag (um/s):   {0:8.3f}\n'.format(ats_mean_v_mag)
+ou += 'ats_mean_u_dx (um/s):    {0:8.3f}\n'.format(ats_mean_u_dx)
+ou += 'ats_mean_u_dy (um/s):    {0:8.3f}\n'.format(ats_mean_u_dy)
+ou += 'ats_mean_u_mag (um/s):   {0:8.3f}\n'.format(ats_mean_u_mag)
+ou += 'ats_v_align_mag (um/s):  {0:8.3f}\n'.format(ats_v_align_mag)
+ou += 'ats_wmean_curv (um^-1):  {0:8.3f}\n'.format(ats_wmean_curv)
 ou += '\n\n'
 #
 fz = open(oudir+'/'+ousfname1, 'w')
