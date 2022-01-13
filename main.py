@@ -66,6 +66,7 @@ for l in f:
   elif key == '!ousfname1':  ousfname1 = ll[1]
   elif key == '!ougfname1':  ougfname1 = ll[1]
   elif key == '!ougfname2':  ougfname2 = ll[1]
+  elif key == '!ougfname3':  ougfname3 = ll[1]
   elif key == '!linear_length_scale':  linear_length_scale = float(ll[1])
   elif key == '!exou_dir':  exou_dir = ll[1]
   elif key == '!expected_v_ang':
@@ -428,6 +429,14 @@ plt.savefig(oudir+'/'+ougfname1)
 
 
 
+
+
+
+
+
+
+
+
 ##################################################################
 ### !graph #######################################################
 # The velocity vectors.
@@ -481,6 +490,44 @@ plt.gca().set_aspect('equal', adjustable='box')
 plt.title("scale:  um/s")
 
 plt.savefig(oudir+'/'+ougfname2)
+
+
+
+
+
+##################################################################
+### !graph #######################################################
+# The linearized tracks.
+plt.clf()
+fig = plt.figure()
+
+plt.plot( pos0_x, pos0_y,
+  linestyle='none',
+  marker='o',
+  markeredgecolor='#000000',
+  markerfacecolor='none',
+  markersize=8
+  )
+
+ca = fig.gca()
+
+for i in range(n_track):
+  atrack[i].plot_track_lin()
+  ca.annotate( str(atrack[i].track_id),
+    xy = (atrack[i].posx[0]+5, atrack[i].posy[0]-5)
+    )
+
+
+plt.xlim(-10, atrack[0].im_w+10 )
+plt.ylim(-10, atrack[0].im_h+10 )
+plt.gca().set_aspect('equal', adjustable='box')
+
+plt.title("scale:  um")
+
+plt.savefig(oudir+'/'+ougfname3)
+
+
+
 
 
 
