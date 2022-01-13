@@ -69,6 +69,9 @@ for l in f:
   elif key == '!ougfname3':  ougfname3 = ll[1]
   elif key == '!linear_length_scale':  linear_length_scale = float(ll[1])
   elif key == '!exou_dir':  exou_dir = ll[1]
+  elif key == '!use_expected_v_ang':
+    if ll[1] == '1':  use_expected_v_ang = True
+    else:             use_expected_v_ang = False
   elif key == '!expected_v_ang':
     expected_ux, expected_uy = read_expected_v_ang( ll[1], ll[2] )
   elif key == '!use_exou':
@@ -112,9 +115,13 @@ flog.write('\n')
 flog.write('\nparticle_size: '+str(atp_conf.particle_size)+'\n')
 
 fou = ''
-fou += 'expected ux uy:'
-fou += ' {0:0.3f}'.format(expected_ux)
-fou += ' {0:0.3f}'.format(expected_uy)
+if use_expected_v_ang:
+  fou += 'expected ux uy:'
+  fou += ' {0:0.3f}'.format(expected_ux)
+  fou += ' {0:0.3f}'.format(expected_uy)
+else:
+  fou += 'expected ux uy:'
+  fou += '  not_used not_used'
 fou += '\n'
 
 fou += 'particle_size: '+str(atp_conf.particle_size)+'\n'
@@ -464,12 +471,13 @@ axey1 = [0, 0, None, -mean_v_max, mean_v_max]
 plt.plot( axex1, axey1, color="#dddddd" )
 plt.plot( circx, circy, color="#dddddd" )
 
-gra_expect_ux = [0, mean_v_max * expected_ux]
-gra_expect_uy = [0, mean_v_max * expected_uy]
-plt.plot(gra_expect_ux, gra_expect_uy,
-  color='#aaffaa',
-  linewidth=3.0
-  )
+if use_expected_v_ang:
+  gra_expect_ux = [0, mean_v_max * expected_ux]
+  gra_expect_uy = [0, mean_v_max * expected_uy]
+  plt.plot(gra_expect_ux, gra_expect_uy,
+    color='#aaffaa',
+    linewidth=3.0
+    )
 
 for i in range(n_track):
   atrack[i].plot_mean_v()
