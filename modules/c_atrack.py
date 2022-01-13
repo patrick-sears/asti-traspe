@@ -117,7 +117,10 @@ class c_atrack:
     self.mean_curv = 0.0
     for i in range(self.n_curv):
       self.mean_curv += self.curv[i]
-    self.mean_curv /= self.n_curv
+    if self.n_curv == 0:
+      self.mean_curv = float('nan')
+    else:
+      self.mean_curv /= self.n_curv
     #
   #
   def save_linear_data(self, oufname):
