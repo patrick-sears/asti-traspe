@@ -391,6 +391,18 @@ for i in range(n_track):
 ats_v_align_dx /= n_track
 ats_v_align_dy /= n_track
 ats_v_align_mag = math.hypot( ats_v_align_dx, ats_v_align_dy )
+#
+# Get the mean speed.
+# As usual for mean values, it's from the first track point
+# to the last.  Unlike ats_mean_v_mag, it ignores the relative
+# directions of the tracks.  The values of ats_mean_v_mag
+# and ats_mean_speed should be the same if the tracks are
+# perfectly aligned (ats_v_align_mag == 1).
+ats_mean_speed = 0.0
+for i in range(n_track):
+  ats_mean_speed += atrack[i].mean_v_mag
+ats_mean_speed /= n_track
+#
 ############################################ &&&
 
 
@@ -403,10 +415,11 @@ ou += '\n'
 ou += 'ats_mean_v_dx (um/s):    {0:8.3f}\n'.format(ats_mean_v_dx)
 ou += 'ats_mean_v_dy (um/s):    {0:8.3f}\n'.format(ats_mean_v_dy)
 ou += 'ats_mean_v_mag (um/s):   {0:8.3f}\n'.format(ats_mean_v_mag)
+ou += 'ats_mean_speed (um/s):   {0:8.3f}\n'.format(ats_mean_speed)
 ou += 'ats_mean_u_dx (um/s):    {0:8.3f}\n'.format(ats_mean_u_dx)
 ou += 'ats_mean_u_dy (um/s):    {0:8.3f}\n'.format(ats_mean_u_dy)
 ou += 'ats_mean_u_mag (um/s):   {0:8.3f}\n'.format(ats_mean_u_mag)
-ou += 'ats_v_align_mag (um/s):  {0:8.3f}\n'.format(ats_v_align_mag)
+ou += 'ats_v_align_mag (1):     {0:8.3f}\n'.format(ats_v_align_mag)
 ou += 'ats_wmean_curv (um^-1):  {0:8.3f}\n'.format(ats_wmean_curv)
 ou += '\n\n'
 #
