@@ -68,6 +68,10 @@ for l in f:
   elif key == '!oufname_g2':  oufname_g2 = ll[1]
   elif key == '!oufname_g3':  oufname_g3 = ll[1]
   elif key == '!oufname_g4':  oufname_g4 = ll[1]
+  elif key == '!use_g4b':
+    if ll[1] == '1':    use_g4b = True
+    else:               use_g4b = False
+  elif key == '!oufname_g4b':  oufname_g4b = ll[1]
   elif key == '!graph4_r_limit':  graph4_r_limit = float( ll[1] )
   elif key == '!graph4_circles':
     graph4_circles = []
@@ -632,6 +636,54 @@ plt.gca().set_aspect('equal', adjustable='box')
 plt.title("scale:  um/s")
 
 plt.savefig(oudir+'/'+oufname_g4, bbox_inches='tight')
+
+
+
+
+
+##################################################################
+### !graph #######################################################
+# The velocity vectors.
+if use_g4b:
+  plt.clf()
+  fig = plt.figure()
+  #
+  n_circ_seg = 80
+  n_circ_pnt = n_circ_seg + 1
+  dang = math.pi * 2.0 / n_circ_seg
+  circx = []
+  circy = []
+  for r in graph4_circles:
+    for i in range(n_circ_pnt):
+      ang = i * dang
+      circx.append( r * math.cos(ang) )
+      circy.append( r * math.sin(ang) )
+    circx.append(None)
+    circy.append(None)
+  #
+  max = graph4_circles[-1]
+  axex1 = [-max, max, None, 0, 0]
+  axey1 = [0, 0, None, -max, max]
+  plt.plot( axex1, axey1, color="#dddddd" )
+  plt.plot( circx, circy, color="#dddddd" )
+  #
+  # Set ticks.
+  gt = []
+  for cir in graph4_circles[::-1]:  gt.append( -cir )
+  gt.append( 0.0 )
+  for cir in graph4_circles:        gt.append(  cir )
+  #
+  plt.xticks( gt )
+  plt.yticks( gt )
+  plt.xlim( -graph4_r_limit, graph4_r_limit )
+  plt.ylim( -graph4_r_limit, graph4_r_limit )
+  plt.gca().set_aspect('equal', adjustable='box')
+  #
+  plt.title("scale:  um/s")
+  #
+  plt.savefig(oudir+'/'+oufname_g4b, bbox_inches='tight')
+
+
 
 
 
