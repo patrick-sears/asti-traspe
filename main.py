@@ -63,10 +63,10 @@ for l in f:
   elif key == '!oudir':  oudir = ll[1]
   elif key == '!oufname1':  oufname1 = ll[1]
   elif key == '!oufname2':  oufname2 = ll[1]
-  elif key == '!ousfname1':  ousfname1 = ll[1]
-  elif key == '!ougfname1':  ougfname1 = ll[1]
-  elif key == '!ougfname2':  ougfname2 = ll[1]
-  elif key == '!ougfname3':  ougfname3 = ll[1]
+  elif key == '!oufname_s1':  oufname_s1 = ll[1]  # s#:  sum files
+  elif key == '!oufname_g1':  oufname_g1 = ll[1]
+  elif key == '!oufname_g2':  oufname_g2 = ll[1]
+  elif key == '!oufname_g3':  oufname_g3 = ll[1]
   elif key == '!linear_length_scale':  linear_length_scale = float(ll[1])
   elif key == '!exou_dir':  exou_dir = ll[1]
   elif key == '!use_expected_v_ang':
@@ -423,7 +423,7 @@ ou += 'ats_v_align_mag (1):     {0:8.3f}\n'.format(ats_v_align_mag)
 ou += 'ats_wmean_curv (um^-1):  {0:8.3f}\n'.format(ats_wmean_curv)
 ou += '\n\n'
 #
-fz = open(oudir+'/'+ousfname1, 'w')
+fz = open(oudir+'/'+oufname_s1, 'w')
 fz.write(ou)
 fz.close()
 ############################################
@@ -460,7 +460,7 @@ plt.gca().set_aspect('equal', adjustable='box')
 
 plt.title("scale:  um")
 
-plt.savefig(oudir+'/'+ougfname1)
+plt.savefig(oudir+'/'+oufname_g1)
 
 
 
@@ -525,7 +525,7 @@ plt.gca().set_aspect('equal', adjustable='box')
 
 plt.title("scale:  um/s")
 
-plt.savefig(oudir+'/'+ougfname2)
+plt.savefig(oudir+'/'+oufname_g2)
 
 
 
@@ -560,7 +560,7 @@ plt.gca().set_aspect('equal', adjustable='box')
 
 plt.title("scale:  um")
 
-plt.savefig(oudir+'/'+ougfname3)
+plt.savefig(oudir+'/'+oufname_g3)
 
 
 
