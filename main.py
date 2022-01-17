@@ -67,6 +67,11 @@ for l in f:
   elif key == '!oufname_g1':  oufname_g1 = ll[1]
   elif key == '!oufname_g2':  oufname_g2 = ll[1]
   elif key == '!oufname_g3':  oufname_g3 = ll[1]
+  elif key == '!oufname_g4':  oufname_g4 = ll[1]
+  elif key == '!graph4_r_limit':  graph4_r_limit = float( ll[1] )
+  elif key == '!graph4_circles':
+    graph4_circles = []
+    for m in ll[1:]:  graph4_circles.append( float(m) )
   elif key == '!linear_length_scale':  linear_length_scale = float(ll[1])
   elif key == '!exou_dir':  exou_dir = ll[1]
   elif key == '!use_expected_v_ang':
@@ -460,8 +465,45 @@ plt.gca().set_aspect('equal', adjustable='box')
 
 plt.title("scale:  um")
 
-plt.savefig(oudir+'/'+oufname_g1)
+plt.savefig(oudir+'/'+oufname_g1, bbox_inches='tight')
 
+
+
+
+
+
+
+
+##################################################################
+### !graph #######################################################
+# The linearized tracks.
+plt.clf()
+fig = plt.figure()
+
+plt.plot( pos0_x, pos0_y,
+  linestyle='none',
+  marker='o',
+  markeredgecolor='#000000',
+  markerfacecolor='none',
+  markersize=8
+  )
+
+ca = fig.gca()
+
+for i in range(n_track):
+  atrack[i].plot_track_lin()
+  ca.annotate( str(atrack[i].track_id),
+    xy = (atrack[i].posx[0]+5, atrack[i].posy[0]-5)
+    )
+
+
+plt.xlim(-10, atrack[0].im_w+10 )
+plt.ylim(-10, atrack[0].im_h+10 )
+plt.gca().set_aspect('equal', adjustable='box')
+
+plt.title("scale:  um")
+
+plt.savefig(oudir+'/'+oufname_g2, bbox_inches='tight')
 
 
 
@@ -525,7 +567,9 @@ plt.gca().set_aspect('equal', adjustable='box')
 
 plt.title("scale:  um/s")
 
-plt.savefig(oudir+'/'+oufname_g2)
+plt.savefig(oudir+'/'+oufname_g3, bbox_inches='tight')
+
+
 
 
 
@@ -533,35 +577,61 @@ plt.savefig(oudir+'/'+oufname_g2)
 
 ##################################################################
 ### !graph #######################################################
-# The linearized tracks.
+# The velocity vectors.
 plt.clf()
 fig = plt.figure()
 
-plt.plot( pos0_x, pos0_y,
-  linestyle='none',
-  marker='o',
-  markeredgecolor='#000000',
-  markerfacecolor='none',
-  markersize=8
-  )
+n_circ_seg = 80
+n_circ_pnt = n_circ_seg + 1
+dang = math.pi * 2.0 / n_circ_seg
+circx = []
+circy = []
+for r in graph4_circles:
+  for i in range(n_circ_pnt):
+    ang = i * dang
+    circx.append( r * math.cos(ang) )
+    circy.append( r * math.sin(ang) )
+  circx.append(None)
+  circy.append(None)
 
-ca = fig.gca()
+max = graph4_circles[-1]
+axex1 = [-max, max, None, 0, 0]
+axey1 = [0, 0, None, -max, max]
+plt.plot( axex1, axey1, color="#dddddd" )
+plt.plot( circx, circy, color="#dddddd" )
 
-for i in range(n_track):
-  atrack[i].plot_track_lin()
-  ca.annotate( str(atrack[i].track_id),
-    xy = (atrack[i].posx[0]+5, atrack[i].posy[0]-5)
+if use_expected_v_ang:
+  gra_expect_ux = [0, mean_v_max * expected_ux]
+  gra_expect_uy = [0, mean_v_max * expected_uy]
+  plt.plot(gra_expect_ux, gra_expect_uy,
+    color='#aaffaa',
+    linewidth=3.0
     )
 
+for i in range(n_track):  atrack[i].plot_mean_v()
 
-plt.xlim(-10, atrack[0].im_w+10 )
-plt.ylim(-10, atrack[0].im_h+10 )
+gra_mean_v_x = [0, ats_mean_v_dx]
+gra_mean_v_y = [0, ats_mean_v_dy]
+plt.plot(gra_mean_v_x, gra_mean_v_y,
+  color='#ff0000',
+  linewidth=3.0
+  )
+
+# Set ticks.
+gt = []
+for cir in graph4_circles[::-1]:  gt.append( -cir )
+gt.append( 0.0 )
+for cir in graph4_circles:        gt.append(  cir )
+
+plt.xticks( gt )
+plt.yticks( gt )
+plt.xlim( -graph4_r_limit, graph4_r_limit )
+plt.ylim( -graph4_r_limit, graph4_r_limit )
 plt.gca().set_aspect('equal', adjustable='box')
 
-plt.title("scale:  um")
+plt.title("scale:  um/s")
 
-plt.savefig(oudir+'/'+oufname_g3)
-
+plt.savefig(oudir+'/'+oufname_g4, bbox_inches='tight')
 
 
 
@@ -607,8 +677,10 @@ if use_exou:
     #
     oufname = exou_tdir[xi]+'/track.png'
     # print("saving:  ", oufname)
-    plt.savefig(oufname)
+    plt.savefig(oufname, bbox_inches='tight')
   ################### ggg
+
+
 
 
 
@@ -649,7 +721,7 @@ if use_exou:
     #
     oufname = exou_tdir[xi]+'/track_linear.png'
     # print("saving:  ", oufname)
-    plt.savefig(oufname)
+    plt.savefig(oufname, bbox_inches='tight')
   ################### ggg
 
 
