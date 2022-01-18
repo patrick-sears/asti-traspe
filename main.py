@@ -443,7 +443,7 @@ fz.close()
 
 ##################################################################
 ### !graph #######################################################
-# The tracks.
+# The tracks.  g1
 fig = plt.figure()
 
 plt.plot( pos0_x, pos0_y,
@@ -480,7 +480,7 @@ plt.savefig(oudir+'/'+oufname_g1, bbox_inches='tight')
 
 ##################################################################
 ### !graph #######################################################
-# The linearized tracks.
+# The linearized tracks.  g2
 plt.clf()
 fig = plt.figure()
 
@@ -520,7 +520,7 @@ plt.savefig(oudir+'/'+oufname_g2, bbox_inches='tight')
 
 ##################################################################
 ### !graph #######################################################
-# The velocity vectors.
+# The velocity vectors.  g3
 plt.clf()
 fig = plt.figure()
 
@@ -581,7 +581,7 @@ plt.savefig(oudir+'/'+oufname_g3, bbox_inches='tight')
 
 ##################################################################
 ### !graph #######################################################
-# The velocity vectors.
+# The velocity vectors.  g4
 plt.clf()
 fig = plt.figure()
 
@@ -643,7 +643,7 @@ plt.savefig(oudir+'/'+oufname_g4, bbox_inches='tight')
 
 ##################################################################
 ### !graph #######################################################
-# The velocity vectors.
+# The velocity vectors.  g4b
 if use_g4b:
   plt.clf()
   fig = plt.figure()
@@ -694,7 +694,7 @@ if use_g4b:
 
 ##################################################################
 ### !graph #######################################################
-# The exou tracks.
+# The exou tracks.  g exou = exout_tdir[xi]/track.png
 if use_exou:
   ################### ggg
   for xi in range(n_exou):
@@ -738,7 +738,7 @@ if use_exou:
 
 ##################################################################
 ### !graph #######################################################
-# The exou linearised tracks.
+# The exou linearised tracks.  g = exout_tdir[xi]/track_linear.png
 if use_exou:
   ################### ggg
   for xi in range(n_exou):
