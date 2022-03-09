@@ -295,18 +295,19 @@ ou += '  i id:  i_track track_id\n'
 ou += '  dx dy:  mean_v_dx(um/s) mean_v_dy(um/s)\n'
 ou += '  v_mag:  mean_v_mag(um/s)\n'
 ou += '  curv:   mean_curv(um^-1)\n'
-ou += '------------------------------------------\n'
-ou += 'i   id   dx       dy       v_mag   curv\n'
-ou += '--- ---- -------- -------- ------- -------\n'
+ou += '--------------------------------------------------------\n'
+ou += 'i   id   dx          dy          v_mag       curv\n'
+ou += '--- ---- ----------- ----------- ----------- -----------\n'
 for i in range(n_track):
   ou += '{0:3d}'.format(i)
   ou += ' {0:4d}'.format(atrack[i].track_id)
   #
-  ou += ' {0:8.3f}'.format( atrack[i].mean_v_dx )
-  ou += ' {0:8.3f}'.format( atrack[i].mean_v_dy )
-  ou += ' {0:7.3f}'.format( atrack[i].mean_v_mag )
+  #  11.6f:  -123.123456
+  ou += ' {0:11.6f}'.format( atrack[i].mean_v_dx )
+  ou += ' {0:11.6f}'.format( atrack[i].mean_v_dy )
+  ou += ' {0:11.6f}'.format( atrack[i].mean_v_mag )
   #
-  ou += ' {0:7.3f}'.format( atrack[i].mean_curv )
+  ou += ' {0:11.6f}'.format( atrack[i].mean_curv )
   ou += '\n'
 fz = open(oudir+'/'+oufname1, 'w')
 fz.write(ou)
@@ -429,15 +430,15 @@ ats_mean_speed /= n_track
 ou = ''
 ou += 'n_track: '+str(n_track)+'\n'
 ou += '\n'
-ou += 'ats_mean_v_dx (um/s):    {0:8.3f}\n'.format(ats_mean_v_dx)
-ou += 'ats_mean_v_dy (um/s):    {0:8.3f}\n'.format(ats_mean_v_dy)
-ou += 'ats_mean_v_mag (um/s):   {0:8.3f}\n'.format(ats_mean_v_mag)
-ou += 'ats_mean_speed (um/s):   {0:8.3f}\n'.format(ats_mean_speed)
-ou += 'ats_mean_u_dx (1):       {0:8.3f}\n'.format(ats_mean_u_dx)
-ou += 'ats_mean_u_dy (1):       {0:8.3f}\n'.format(ats_mean_u_dy)
-ou += 'ats_mean_u_mag (1):      {0:8.3f}\n'.format(ats_mean_u_mag)
-ou += 'ats_v_align_mag (1):     {0:8.3f}\n'.format(ats_v_align_mag)
-ou += 'ats_wmean_curv (um^-1):  {0:8.3f}\n'.format(ats_wmean_curv)
+ou += 'ats_mean_v_dx (um/s):    {0:11.6f}\n'.format(ats_mean_v_dx)
+ou += 'ats_mean_v_dy (um/s):    {0:11.6f}\n'.format(ats_mean_v_dy)
+ou += 'ats_mean_v_mag (um/s):   {0:11.6f}\n'.format(ats_mean_v_mag)
+ou += 'ats_mean_speed (um/s):   {0:11.6f}\n'.format(ats_mean_speed)
+ou += 'ats_mean_u_dx (1):       {0:11.6f}\n'.format(ats_mean_u_dx)
+ou += 'ats_mean_u_dy (1):       {0:11.6f}\n'.format(ats_mean_u_dy)
+ou += 'ats_mean_u_mag (1):      {0:11.6f}\n'.format(ats_mean_u_mag)
+ou += 'ats_v_align_mag (1):     {0:11.6f}\n'.format(ats_v_align_mag)
+ou += 'ats_wmean_curv (um^-1):  {0:11.6f}\n'.format(ats_wmean_curv)
 ou += '\n\n'
 #
 fz = open(oudir+'/'+oufname_s1, 'w')
