@@ -394,15 +394,20 @@ ats_wmean_curv /= all_track_sum_length
 # of the speed.  I.e. the mean of the unit vectors.
 # It is the "alignment vector".  Note it is not a unit
 # vector.
-ats_v_align_dx = 0.0
-ats_v_align_dy = 0.0
-ats_v_align_mag = 0.0
-for i in range(n_track):
-  ats_v_align_dx += atrack[i].mean_u_dx
-  ats_v_align_dy += atrack[i].mean_u_dy
-ats_v_align_dx /= n_track
-ats_v_align_dy /= n_track
-ats_v_align_mag = math.hypot( ats_v_align_dx, ats_v_align_dy )
+ats_v_align_dx = float('nan')
+ats_v_align_dy = float('nan')
+ats_v_align_mag = float('nan')
+if n_track > 1:
+  ats_v_align_dx = 0.0
+  ats_v_align_dy = 0.0
+  # There is no point in calculating alignment if there
+  # aren't at least two tracks to align with each other.
+  for i in range(n_track):
+    ats_v_align_dx += atrack[i].mean_u_dx
+    ats_v_align_dy += atrack[i].mean_u_dy
+  ats_v_align_dx /= n_track
+  ats_v_align_dy /= n_track
+  ats_v_align_mag = math.hypot( ats_v_align_dx, ats_v_align_dy )
 #
 # Get the mean speed.
 # As usual for mean values, it's from the first track point
