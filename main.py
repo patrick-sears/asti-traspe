@@ -6,8 +6,11 @@ from modules.c_atrack import c_atrack
 import math
 import sys
 import os
-from matplotlib import pyplot as plt
 from datetime import datetime
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
+
 
 stime_hu = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 

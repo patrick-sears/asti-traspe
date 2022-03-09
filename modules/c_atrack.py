@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 
-from matplotlib import pyplot as plt
 import math
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
 
 
 ##################################################################
