@@ -367,11 +367,30 @@ fz.close()
 
 # HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH--here--
 ### vid_duration = None  # In seconds.
+# Going from mid-time taking frame 0 to mid-time taking frame[n-1],
+# the video duration is (frame_period * (n_frame-1)).  But in
+# showing the video (particularly if looping) and displaying
+# each frame for a duration of frame_period, the video
+# duration is (frame_period * n_frame).  I think this second
+# one is what SAVA shows in its screen.  For motion vector
+# calculations, it's the n-1 duration that is the correct
+# one to use.  Let's output both.
+# For "showing", use "_sho".
+# For motion work, use "_nmo" for "n minus one".
+#
+# Assuming imfile_i_fir == 0 always.
+vid_duration_sho = (atp_conf.imfile_i_last+1) * (atp_conf.ms_per_frame/1000.0)
+vid_duration_nmo = (atp_conf.imfile_i_last)   * (atp_conf.ms_per_frame/1000.0)
+
+
 
 ############################################
 # Save oufname3 data.
 ou = ''
 ou += '--------------------------------------------------------\n'
+ou += 'For vid_duration_(sho/nmo).  Use sho for showing vid\n'
+ou += 'calculations.  Use nmo for motion calculations.\n'
+ou += '---------------\n'
 ou += '!start_table_1.\n'
 ou += '--------------------------------------------------------\n'
 ou += '!im_w (um) ; {0:0.3f}\n'.format( atrack[0].im_w )
@@ -379,6 +398,8 @@ ou += '!im_h (um) ; {0:0.3f}\n'.format( atrack[0].im_h )
 ou += '!im_center_x (um) ; {0:0.3f}\n'.format( atrack[0].im_center_x )
 ou += '!im_center_y (um) ; {0:0.3f}\n'.format( atrack[0].im_center_y )
 ou += '!vid_start_time ; '+vid_start_time.strftime("%Y-%m-%d %H:%M:%S")+'\n'
+ou += '!vid_duration_sho (s) ; {0:0.6f}\n'.format(vid_duration_sho)
+ou += '!vid_duration_nmo (s) ; {0:0.6f}\n'.format(vid_duration_nmo)
 ou += '--------------------------------------------------------\n'
 ou += '\n'
 ou += '\n'
