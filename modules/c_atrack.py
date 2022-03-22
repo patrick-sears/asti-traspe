@@ -11,6 +11,7 @@ class c_atrack:
   #
   def __init__(self):
     self.linear_length_scale = None
+    self.vid_start_time = None  # datetime object when set.
   #
   def load(self, f):
     ll = f.readline().strip().split(' ')
@@ -43,6 +44,9 @@ class c_atrack:
     self.im_h = self.im_h_px * um_per_pix
     self.im_center_x = self.im_w / 2.0
     self.im_center_y = self.im_h / 2.0
+  #
+  def set_vid_start_time(self, vto):
+    self.vid_start_time = vto
   #
   def pro1(self):
     self.post = []  # time relative to vid start, in seconds.

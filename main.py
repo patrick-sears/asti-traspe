@@ -62,6 +62,7 @@ for l in f:
     run_name = ll[1]
     print("run_name: ", run_name)
   elif key == '!fname_asti_trackpy_conf':  fname_asti_trackpy_conf = ll[1]
+  elif key == '!fname_vid_times':  fname_vid_times = ll[1]
   elif key == '!dir_asti_tp':  dir_asti_tp = ll[1]
   elif key == '!oudir':  oudir = ll[1]
   elif key == '!oufname1':  oufname1 = ll[1]
@@ -72,6 +73,7 @@ for l in f:
   elif key == '!oufname_g2':  oufname_g2 = ll[1]
   elif key == '!oufname_g3':  oufname_g3 = ll[1]
   elif key == '!oufname_g4':  oufname_g4 = ll[1]
+  elif key == '!vid_times_name':  vid_times_name = ll[1]
   elif key == '!use_g4b':
     if ll[1] == '1':    use_g4b = True
     else:               use_g4b = False
@@ -146,6 +148,41 @@ flog.write(fou)
 
 
 
+############################################ *()*
+print("Getting vid start time.")
+vid_start_time = None
+f = open(fname_vid_times)
+found = False
+for l in f:
+  if l.startswith('!table_start'):
+    found = True
+    break
+if not found:
+  print("Error.  !table_start not found.")
+  print("  fname_vid_times: ", fname_vid_times)
+  sys.exit(1)
+for i in range(3):  f.readline()
+found2 = False
+for l in f:
+  l = l.strip()
+  ll = l.split(';')
+  for i in range(len(ll)):
+    ll[i] = ll[i].strip()
+  if ll[0] == vid_times_name:
+    found2 = True
+    vid_start_time = datetime.strptime(ll[2], "%Y-%m-%d %H:%M:%S")
+    break
+f.close()
+if not found2:
+  print("Error.  vid_times_name not found.")
+  print("  vid_times_name:  ", vid_times_name)
+  print("  fname_vid_times: ", fname_vid_times)
+  sys.exit(1133)
+# print("vid_start_time: ", vid_start_time)
+############################################ *()*
+
+
+
 
 ############################################ <***>
 # Create atrack[], read asti-trackpy data, and fill atrack[].
@@ -189,6 +226,15 @@ f.close()
 
 
 
+####################################################### **()**
+print("Adding vid time to atracks.")
+# This is currently not used for anything but might
+# be in the future.
+for i in range(n_track):
+  atrack[i].set_vid_start_time(vid_start_time)
+####################################################### **()**
+
+
 
 #################################
 # Record track IDs to log file.
@@ -204,6 +250,9 @@ for i in range(n_track):
 fou += '\n'
 flog.write(fou)
 #################################
+
+
+
 
 
 
@@ -316,6 +365,8 @@ fz.close()
 ############################################
 
 
+# HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH--here--
+### vid_duration = None  # In seconds.
 
 ############################################
 # Save oufname3 data.
@@ -327,6 +378,7 @@ ou += '!im_w (um) ; {0:0.3f}\n'.format( atrack[0].im_w )
 ou += '!im_h (um) ; {0:0.3f}\n'.format( atrack[0].im_h )
 ou += '!im_center_x (um) ; {0:0.3f}\n'.format( atrack[0].im_center_x )
 ou += '!im_center_y (um) ; {0:0.3f}\n'.format( atrack[0].im_center_y )
+ou += '!vid_start_time ; '+vid_start_time.strftime("%Y-%m-%d %H:%M:%S")+'\n'
 ou += '--------------------------------------------------------\n'
 ou += '\n'
 ou += '\n'
