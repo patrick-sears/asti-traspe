@@ -20,12 +20,14 @@ class c_atrack:
     f.readline() # ---
     f.readline() # i_frame x y
     # The data are in pix with y_inv.
+    self.post_frame = []
     self.posx_px = []
     self.posy_px = []
     for l in f:
       l = l.strip()
       if len(l) == 0:  break
       ll = l.split('\t')
+      self.post_frame.append( float(ll[0]) )
       self.posx_px.append( float(ll[1]) )
       self.posy_px.append( float(ll[2]) )
     self.n_pos = len(self.posx_px)
@@ -39,15 +41,23 @@ class c_atrack:
     self.s_per_frame = self.ms_per_frame / 1000.0
     self.im_w = self.im_w_px * um_per_pix
     self.im_h = self.im_h_px * um_per_pix
+    self.im_center_x = self.im_w / 2.0
+    self.im_center_y = self.im_h / 2.0
   #
   def pro1(self):
+    self.post = []  # time relative to vid start, in seconds.
     self.posx = []
     self.posy = []
     for i in range(self.n_pos):
+      self.post.append( self.post_frame[i] * self.s_per_frame )
       self.posx.append( self.posx_px[i] * self.um_per_pix )
       uposy = self.im_h_px - self.posy_px[i] - 1
       self.posy.append( uposy * self.um_per_pix )
-  #
+    #
+    self.post_last = self.post[self.n_pos-1]
+    self.posx_last = self.posx[self.n_pos-1]
+    self.posy_last = self.posy[self.n_pos-1]
+    #
     self.delta_t = (self.n_pos-1) * self.s_per_frame
     self.delta_x = self.posx[ self.n_pos-1 ] - self.posx[0]
     self.delta_y = self.posy[ self.n_pos-1 ] - self.posy[0]
@@ -68,6 +78,8 @@ class c_atrack:
       dy = self.posy[ib] - self.posy[ia]
       d  = math.hypot(dx,dy)
       self.sum_length += d
+    #
+  #
   #
   def pro2(self):
     lls2 = self.linear_length_scale**2
