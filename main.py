@@ -66,6 +66,7 @@ for l in f:
   elif key == '!oudir':  oudir = ll[1]
   elif key == '!oufname1':  oufname1 = ll[1]
   elif key == '!oufname2':  oufname2 = ll[1]
+  elif key == '!oufname3':  oufname3 = ll[1]
   elif key == '!oufname_s1':  oufname_s1 = ll[1]  # s#:  sum files
   elif key == '!oufname_g1':  oufname_g1 = ll[1]
   elif key == '!oufname_g2':  oufname_g2 = ll[1]
@@ -313,6 +314,45 @@ fz = open(oudir+'/'+oufname1, 'w')
 fz.write(ou)
 fz.close()
 ############################################
+
+
+
+############################################
+# Save oufname3 data.
+ou = ''
+ou += '--------------------------------------------------------\n'
+ou += '!start_table_1.\n'
+ou += '--------------------------------------------------------\n'
+ou += '!im_w (um) ; {0:0.3f}\n'.format( atrack[0].im_w )
+ou += '!im_h (um) ; {0:0.3f}\n'.format( atrack[0].im_h )
+ou += '--------------------------------------------------------\n'
+ou += '\n'
+ou += '\n'
+ou += '--------------------------------------------------------\n'
+ou += 'Column long headings:\n'
+ou += '  i id:  i_track track_id\n'
+ou += '  x1 y1, all in um relative to bot-lef of image.\n'
+ou += '!start_table_2.\n'
+ou += '--------------------------------------------------------\n'
+ou += 'i   ; id   ;       x1 ;       y1\n'
+ou += '---   ---- ----------   --------\n'
+for i in range(n_track):
+  ou += '{0:3d}'.format(i)
+  ou += ' ; {0:4d}'.format(atrack[i].track_id)
+  ou += ' ; {0:8.3f}'.format(atrack[i].posx[0])
+  ou += ' ; {0:8.3f}'.format(atrack[i].posy[0])
+  ou += '\n'
+ou += '--------------------------------------------------------\n'
+#########
+fz = open(oudir+'/'+oufname3, 'w')
+fz.write(ou)
+fz.close()
+############################################
+
+
+
+
+
 
 
 
